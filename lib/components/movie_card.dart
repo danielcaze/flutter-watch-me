@@ -41,11 +41,12 @@ class MovieCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, color: AppColors.white),
                     ),
-                    Text(description, style: TextStyle(color: AppColors.gray)),
-                    Spacer(),
+                    Text(description,
+                        style: const TextStyle(color: AppColors.gray)),
+                    const Spacer(),
                     StarRating(rating: rating),
                   ],
                 ),

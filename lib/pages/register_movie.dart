@@ -6,7 +6,7 @@ class MovieRegistrationPage extends StatefulWidget {
   MovieRegistrationPage({Key? key}) : super(key: key);
 
   @override
-  _MovieRegistrationPageState createState() => _MovieRegistrationPageState();
+  State<MovieRegistrationPage> createState() => _MovieRegistrationPageState();
 }
 
 class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
@@ -25,50 +25,50 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background2,
-        title: Text('Movie Registration',
+        title: const Text('Movie Registration',
             style: TextStyle(color: AppColors.white)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             TextFormField(
               controller: imageUrlController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Image URL',
                 labelStyle: TextStyle(color: AppColors.white),
               ),
-              style: TextStyle(color: AppColors.white),
+              style: const TextStyle(color: AppColors.white),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             TextFormField(
               controller: titleController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Title',
                 labelStyle: TextStyle(color: AppColors.white),
               ),
-              style: TextStyle(color: AppColors.white),
+              style: const TextStyle(color: AppColors.white),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             TextFormField(
               controller: genreController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Genre',
                 labelStyle: TextStyle(color: AppColors.white),
               ),
-              style: TextStyle(color: AppColors.white),
+              style: const TextStyle(color: AppColors.white),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Theme(
               data: Theme.of(context).copyWith(
                 canvasColor: AppColors.background,
-                textTheme: TextTheme(
+                textTheme: const TextTheme(
                   titleMedium: const TextStyle(color: AppColors.white),
                 ),
               ),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 decoration: BoxDecoration(
                   color: AppColors.background2,
                   borderRadius: BorderRadius.circular(10.0),
@@ -76,7 +76,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   value: ageRange,
-                  underline: SizedBox(),
+                  underline: const SizedBox(),
                   onChanged: (String? newValue) {
                     setState(() {
                       ageRange = newValue!;
@@ -102,23 +102,23 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
                 ),
               ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             TextFormField(
               controller: durationController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Duration',
                 labelStyle: TextStyle(color: AppColors.white),
               ),
               keyboardType: TextInputType.number,
-              style: TextStyle(color: AppColors.white),
+              style: const TextStyle(color: AppColors.white),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Align(
               alignment: Alignment.centerLeft,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Rating:',
                     style: TextStyle(color: AppColors.white),
                   ),
@@ -129,7 +129,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
                     allowHalfRating: false,
                     itemCount: 5,
                     itemBuilder: (context, _) =>
-                        Icon(Icons.star, color: AppColors.yellow),
+                        const Icon(Icons.star, color: AppColors.yellow),
                     onRatingUpdate: (rating) {
                       setState(() {
                         this.rating = rating;
@@ -141,23 +141,24 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
             ),
             TextFormField(
               controller: yearController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Year',
                 labelStyle: TextStyle(color: AppColors.white),
+                counterText: "",
               ),
               maxLength: 4,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: AppColors.white),
+              style: const TextStyle(color: AppColors.white),
             ),
-            SizedBox(height: 5.0),
+            const SizedBox(height: 5.0),
             TextFormField(
               controller: descriptionController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Description',
                 labelStyle: TextStyle(color: AppColors.white),
               ),
               maxLines: 3,
-              style: TextStyle(color: AppColors.white),
+              style: const TextStyle(color: AppColors.white),
             ),
           ],
         ),
@@ -176,8 +177,8 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
           print('Year: ${yearController.text}');
           print('Description: ${descriptionController.text}');
         },
-        child: Icon(Icons.save, color: AppColors.background2),
         backgroundColor: AppColors.yellow,
+        child: const Icon(Icons.save, color: AppColors.background2),
       ),
     );
   }

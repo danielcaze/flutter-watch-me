@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:watch_me/components/movie-card.dart';
+import 'package:watch_me/components/movie_card.dart';
 import 'package:watch_me/models/movie.dart';
-import 'package:watch_me/pages/register-movie.dart';
+import 'package:watch_me/pages/register_movie.dart';
 import 'package:watch_me/utils/colors.dart';
 
 void main() {
@@ -108,8 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/register-movie'),
         tooltip: 'Add a new movie',
-        child: const Icon(Icons.add, color: AppColors.background2),
         backgroundColor: AppColors.yellow,
+        child: const Icon(Icons.add, color: AppColors.background2),
       ),
     );
   }

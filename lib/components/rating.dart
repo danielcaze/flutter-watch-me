@@ -4,7 +4,7 @@ import 'package:watch_me/utils/colors.dart';
 class StarRating extends StatelessWidget {
   final double rating;
 
-  StarRating({required this.rating});
+  const StarRating({super.key, required this.rating});
 
   @override
   Widget build(BuildContext context) {
