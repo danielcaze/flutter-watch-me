@@ -20,14 +20,17 @@ class MovieCard extends StatelessWidget {
     return Card(
       color: AppColors.background2,
       child: SizedBox(
-        height: 200, // set a fixed height for the card
+        height: 180,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4.0),
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Expanded(
