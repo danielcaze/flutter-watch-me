@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:watch_me/components/movie_card.dart';
 import 'package:watch_me/models/movie.dart';
-import 'package:watch_me/pages/register_movie.dart';
+import 'package:watch_me/screens/register_movie.dart';
+import 'package:watch_me/services/database_helper.dart';
 import 'package:watch_me/utils/colors.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper.instance.initializeDatabase();
   runApp(const MyApp());
 }
 
@@ -39,20 +42,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Movie> movies = [
-    Movie(
-        id: Uuid(),
-        imageUrl: 'https://github.com/danielcaze.png',
-        title: 'Movie 1',
-        description: 'This is a description of movie 1.',
-        rating: 3.9,
-        ageRange: '14',
-        gender: 'HORROR',
-        runtime: const Duration(hours: 12),
-        year: 2012),
-    // Add more movies here...
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,19 +83,43 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: movies.length,
-        itemBuilder: (context, index) {
-          return MovieCard(
-            imageUrl: movies[index].imageUrl,
-            title: movies[index].title,
-            description: movies[index].description,
-            rating: movies[index].rating,
-          );
-        },
-      ),
+      body: FutureBuilder<List<Movie>?>(
+          future: DatabaseHelper.getAll(),
+          builder: (context, AsyncSnapshot<List<Movie>?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Center(
+                  child: Text(
+                snapshot.error.toString(),
+                style: TextStyle(color: AppColors.white),
+              ));
+            } else if (snapshot.hasData) {
+              if (snapshot.data != null) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return MovieCard(
+                      imageUrl: snapshot.data![index].imageUrl,
+                      title: snapshot.data![index].title,
+                      description: snapshot.data![index].description,
+                      rating: snapshot.data![index].rating,
+                    );
+                  },
+                );
+              }
+            }
+            return const Center(
+                child: Text(
+              "No movies registered yet. Try registering a new movie!",
+              style: TextStyle(color: AppColors.white),
+            ));
+          }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/register-movie'),
+        onPressed: () async {
+          await Navigator.pushNamed(context, '/register-movie');
+          setState(() {});
+        },
         tooltip: 'Add a new movie',
         backgroundColor: AppColors.yellow,
         child: const Icon(Icons.add, color: AppColors.background2),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+import 'package:watch_me/models/movie.dart';
+import 'package:watch_me/services/database_helper.dart';
 import 'package:watch_me/utils/colors.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -10,14 +13,46 @@ class MovieRegistrationPage extends StatefulWidget {
 }
 
 class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
+  bool isEditing = false;
   TextEditingController imageUrlController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController genreController = TextEditingController();
   String ageRange = 'Select Age Range';
-  TextEditingController durationController = TextEditingController();
+  TextEditingController runtimeController = TextEditingController();
   double rating = 0.0;
   TextEditingController yearController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  createMovie(context) async {
+    final movie = Movie(
+      id: !isEditing ? const Uuid().v4() : 'id do item aqui',
+      imageUrl: imageUrlController.text,
+      title: titleController.text,
+      genre: genreController.text,
+      ageRange: ageRange,
+      runtime: int.parse(runtimeController.text),
+      rating: rating,
+      year: int.parse(yearController.text),
+      description: descriptionController.text,
+    );
+
+    if (!isEditing) {
+      await DatabaseHelper.insert(movie);
+    } else {
+      await DatabaseHelper.update(movie);
+    }
+
+    imageUrlController.clear();
+    titleController.clear();
+    genreController.clear();
+    ageRange = 'Select Age Range';
+    runtimeController.clear();
+    rating = 0.0;
+    yearController.clear();
+    descriptionController.clear();
+
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +139,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
             ),
             const SizedBox(height: 10.0),
             TextFormField(
-              controller: durationController,
+              controller: runtimeController,
               decoration: const InputDecoration(
                 labelText: 'Duration',
                 labelStyle: TextStyle(color: AppColors.white),
@@ -164,19 +199,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Handle saving the movie data here.
-          // For now, we'll just print it to the console.
-          print("Image URL: ${imageUrlController.text}");
-          print('Title: ${titleController.text}');
-          print('Genre: ${genreController.text}');
-          print('Age Range: $ageRange');
-          print(
-              "Duration: ${Duration(hours: int.parse(durationController.text))}");
-          print('Rating: $rating');
-          print('Year: ${yearController.text}');
-          print('Description: ${descriptionController.text}');
-        },
+        onPressed: () => createMovie(context),
         backgroundColor: AppColors.yellow,
         child: const Icon(Icons.save, color: AppColors.background2),
       ),

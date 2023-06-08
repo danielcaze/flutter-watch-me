@@ -1,12 +1,10 @@
-import 'package:uuid/uuid.dart';
-
 class Movie {
-  final Uuid id;
+  final String id;
   final String imageUrl;
   final String title;
-  final String gender;
+  final String genre;
   final String ageRange;
-  final Duration runtime;
+  final int runtime;
   final double rating;
   final String description;
   final int year;
@@ -15,7 +13,7 @@ class Movie {
     required this.id,
     required this.imageUrl,
     required this.title,
-    required this.gender,
+    required this.genre,
     required this.ageRange,
     required this.runtime,
     required this.rating,
@@ -28,9 +26,9 @@ class Movie {
       id: json['id'],
       imageUrl: json['imageUrl'],
       title: json['title'],
-      gender: json['gender'],
+      genre: json['genre'],
       ageRange: json['ageRange'],
-      runtime: Duration(minutes: json['runtime']),
+      runtime: json['runtime'],
       rating: json['rating'],
       description: json['description'],
       year: json['year'],
@@ -41,9 +39,9 @@ class Movie {
         'id': id,
         'imageUrl': imageUrl,
         'title': title,
-        'gender': gender,
+        'genre': genre,
         'ageRange': ageRange,
-        'runtime': runtime.inMinutes,
+        'runtime': runtime,
         'rating': rating,
         'description': description,
         'year': year,
