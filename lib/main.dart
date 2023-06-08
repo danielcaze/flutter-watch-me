@@ -48,14 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // Add more movies here...
   ];
 
-  bool isModalOpen = false;
-
-  void openModal() {
-    setState(() {
-      isModalOpen = !isModalOpen;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +56,38 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.yellow,
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () => {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Team:"),
+                    content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Alisson Silva - RGM: 23405589"),
+                          Text("Daniel Cazé - RGM: 23467932"),
+                          Text("Daniel Vitor - RGM: 23381876"),
+                          Text("Victor Fernandes - RGM: "),
+                        ]),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text("Close"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              )
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: movies.length,
@@ -77,8 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: openModal,
-        tooltip: 'Increment',
+        onPressed: () => {},
+        tooltip: 'Add a new movie',
         child: const Icon(Icons.add),
       ),
     );
