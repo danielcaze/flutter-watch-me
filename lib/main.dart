@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:watch_me/components/movie_card.dart';
 import 'package:watch_me/models/movie.dart';
-import 'package:watch_me/screens/register_movie.dart';
+import 'package:watch_me/screens/movie_details.dart';
+import 'package:watch_me/screens/manage_movie.dart';
 import 'package:watch_me/services/database_helper.dart';
 import 'package:watch_me/utils/colors.dart';
 
@@ -18,14 +19,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'watch-me',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppColors.theme,
       home: const MyHomePage(title: 'Watch-me'),
       routes: {
-        '/register-movie': (context) =>
-            MovieRegistrationPage(), // This is your second page.
+        '/manage_movie': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments
+              as Map<String, dynamic>?;
+          final movieId = args?['id'] as String?;
+          return ManageMoviePage(movieId: movieId ?? '');
+        }, // This is your second page.
+        '/movie_details': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments
+              as Map<String, dynamic>?;
+          final movieId = args?['id'] as String?;
+          return MovieDetailsPage(movieId: movieId ?? '');
+        }, // This is your second page.
       },
     );
   }
@@ -57,19 +65,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text("Team:"),
+                    title: const Text("Team:",
+                        style: TextStyle(color: AppColors.white)),
                     content: const Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Alisson Silva - RGM: 23405589"),
-                          Text("Daniel Cazé - RGM: 23467932"),
-                          Text("Daniel Vitor - RGM: 23381876"),
-                          Text("Victor Fernandes - RGM: "),
+                          Text("Alisson Silva - RGM: 23405589",
+                              style: TextStyle(color: AppColors.white)),
+                          Text("Daniel Cazé - RGM: 23467932",
+                              style: TextStyle(color: AppColors.white)),
+                          Text("Daniel Vitor - RGM: 23381876",
+                              style: TextStyle(color: AppColors.white)),
+                          Text("Victor Fernandes - RGM: ",
+                              style: TextStyle(color: AppColors.white)),
                         ]),
                     actions: <Widget>[
                       TextButton(
-                        child: Text("Close"),
+                        child: const Text("Close",
+                            style: TextStyle(color: AppColors.yellow)),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -117,12 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: AppColors.background2,
                           ),
                         ),
-                        child: MovieCard(
-                          imageUrl: item.imageUrl,
-                          title: item.title,
-                          description: item.description,
-                          rating: item.rating,
-                        ));
+                        child: MovieCard(movie: item));
                   },
                 );
               }
@@ -135,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.pushNamed(context, '/register-movie');
+          await Navigator.pushNamed(context, '/manage_movie');
           setState(() {});
         },
         tooltip: 'Add a new movie',

@@ -65,6 +65,18 @@ class DatabaseHelper {
     return List.generate((maps.length), (index) => Movie.fromJson(maps[index]));
   }
 
+  static Future<Movie?> getMovie(String movieId) async {
+    Database db = await instance.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query(table, where: 'id = ?', whereArgs: [movieId]);
+
+    if (maps.isEmpty) {
+      return null;
+    }
+
+    return Movie.fromJson(maps.first);
+  }
+
   static Future<int> insert(Movie movie) async {
     Database db = await instance.database;
     return await db.insert(table, movie.toJson(),

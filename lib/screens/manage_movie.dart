@@ -5,14 +5,20 @@ import 'package:watch_me/services/database_helper.dart';
 import 'package:watch_me/utils/colors.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class MovieRegistrationPage extends StatefulWidget {
-  MovieRegistrationPage({Key? key}) : super(key: key);
+class ManageMoviePage extends StatefulWidget {
+  final String movieId;
+
+  const ManageMoviePage({
+    super.key,
+    required this.movieId,
+  });
 
   @override
-  State<MovieRegistrationPage> createState() => _MovieRegistrationPageState();
+  State<ManageMoviePage> createState() => _ManageMoviePageState();
 }
 
-class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
+class _ManageMoviePageState extends State<ManageMoviePage> {
+  late String _movieId;
   bool isEditing = false;
   TextEditingController imageUrlController = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -23,9 +29,35 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
   TextEditingController yearController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  createMovie(context) async {
+  @override
+  void initState() {
+    super.initState();
+    _movieId = widget.movieId;
+    if (_movieId != "" && _movieId.isNotEmpty) {
+      isEditing = true;
+      fetchMovieDetails();
+    }
+  }
+
+  Future<void> fetchMovieDetails() async {
+    final movie = await DatabaseHelper.getMovie(_movieId);
+    if (movie != null) {
+      setState(() {
+        imageUrlController.text = movie.imageUrl;
+        titleController.text = movie.title;
+        genreController.text = movie.genre;
+        ageRange = movie.ageRange;
+        runtimeController.text = movie.runtime.toString();
+        rating = movie.rating;
+        yearController.text = movie.year.toString();
+        descriptionController.text = movie.description;
+      });
+    }
+  }
+
+  saveMovie(context) async {
     final movie = Movie(
-      id: !isEditing ? const Uuid().v4() : 'id do item aqui',
+      id: !isEditing ? const Uuid().v4() : _movieId,
       imageUrl: imageUrlController.text,
       title: titleController.text,
       genre: genreController.text,
@@ -51,7 +83,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
     yearController.clear();
     descriptionController.clear();
 
-    Navigator.pop(context);
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override
@@ -64,7 +96,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
             style: TextStyle(color: AppColors.white)),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             const SizedBox(height: 10.0),
@@ -99,7 +131,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
               data: Theme.of(context).copyWith(
                 canvasColor: AppColors.background,
                 textTheme: const TextTheme(
-                  titleMedium: const TextStyle(color: AppColors.white),
+                  titleMedium: TextStyle(color: AppColors.white),
                 ),
               ),
               child: Container(
@@ -129,7 +161,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: DefaultTextStyle(
-                        style: TextStyle(color: AppColors.white),
+                        style: const TextStyle(color: AppColors.white),
                         child: Text(value),
                       ),
                     );
@@ -199,7 +231,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => createMovie(context),
+        onPressed: () => saveMovie(context),
         backgroundColor: AppColors.yellow,
         tooltip: "Save",
         child: const Icon(Icons.save, color: AppColors.background2),
