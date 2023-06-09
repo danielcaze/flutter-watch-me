@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:watch_me/components/movie_card.dart';
 import 'package:watch_me/models/movie.dart';
 import 'package:watch_me/screens/register_movie.dart';
@@ -52,14 +51,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.info_outline),
+            icon: const Icon(Icons.info_outline),
             onPressed: () => {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text("Team:"),
-                    content: Column(
+                    content: const Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -92,19 +91,38 @@ class _MyHomePageState extends State<MyHomePage> {
               return Center(
                   child: Text(
                 snapshot.error.toString(),
-                style: TextStyle(color: AppColors.white),
+                style: const TextStyle(color: AppColors.white),
               ));
             } else if (snapshot.hasData) {
               if (snapshot.data != null) {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    return MovieCard(
-                      imageUrl: snapshot.data![index].imageUrl,
-                      title: snapshot.data![index].title,
-                      description: snapshot.data![index].description,
-                      rating: snapshot.data![index].rating,
-                    );
+                    final item = snapshot.data![index];
+                    return Dismissible(
+                        key: Key(item.id),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (direction) {
+                          if (direction == DismissDirection.endToStart) {
+                            DatabaseHelper.delete(item);
+                          }
+                          setState(() {});
+                        },
+                        background: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          alignment: Alignment.centerRight,
+                          color: Colors.red,
+                          child: const Icon(
+                            Icons.delete,
+                            color: AppColors.background2,
+                          ),
+                        ),
+                        child: MovieCard(
+                          imageUrl: item.imageUrl,
+                          title: item.title,
+                          description: item.description,
+                          rating: item.rating,
+                        ));
                   },
                 );
               }

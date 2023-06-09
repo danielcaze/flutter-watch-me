@@ -201,6 +201,7 @@ class _MovieRegistrationPageState extends State<MovieRegistrationPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => createMovie(context),
         backgroundColor: AppColors.yellow,
+        tooltip: "Save",
         child: const Icon(Icons.save, color: AppColors.background2),
       ),
     );

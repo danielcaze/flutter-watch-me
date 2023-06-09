@@ -39,8 +39,7 @@ class DatabaseHelper {
   }
 
   Future _onCreate(Database db, int version) async {
-    await db.execute(
-        '''
+    await db.execute('''
           CREATE TABLE $table (
             $columnId TEXT PRIMARY KEY,
             $columnImageUrl TEXT NOT NULL,
@@ -67,7 +66,6 @@ class DatabaseHelper {
   }
 
   static Future<int> insert(Movie movie) async {
-    print(movie);
     Database db = await instance.database;
     return await db.insert(table, movie.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
