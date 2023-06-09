@@ -49,6 +49,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  void _refresh() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: TextStyle(color: AppColors.white)),
                           Text("Daniel Vitor - RGM: 23381876",
                               style: TextStyle(color: AppColors.white)),
-                          Text("Victor Fernandes - RGM: ",
+                          Text("Victor Fernandes - RGM: 23383828",
                               style: TextStyle(color: AppColors.white)),
                         ]),
                     actions: <Widget>[
@@ -120,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (direction == DismissDirection.endToStart) {
                             DatabaseHelper.delete(item);
                           }
-                          setState(() {});
+                          _refresh();
                         },
                         background: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -131,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: AppColors.background2,
                           ),
                         ),
-                        child: MovieCard(movie: item));
+                        child: MovieCard(movie: item, refresh: _refresh));
                   },
                 );
               }
@@ -145,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.pushNamed(context, '/manage_movie');
-          setState(() {});
+          _refresh();
         },
         tooltip: 'Add a new movie',
         backgroundColor: AppColors.yellow,

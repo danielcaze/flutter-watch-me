@@ -5,8 +5,9 @@ import 'package:watch_me/utils/colors.dart';
 
 class MovieCard extends StatelessWidget {
   final Movie movie;
+  final Function refresh;
 
-  const MovieCard({super.key, required this.movie});
+  const MovieCard({super.key, required this.movie, required this.refresh});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class MovieCard extends StatelessWidget {
                             await Navigator.pushNamed(context, '/movie_details',
                                 arguments: {'id': movie.id});
                             if (context.mounted) Navigator.of(context).pop();
+                            refresh();
                           },
                         ),
                         TextButton(
@@ -42,6 +44,7 @@ class MovieCard extends StatelessWidget {
                                   context, '/manage_movie',
                                   arguments: {'id': movie.id});
                               if (context.mounted) Navigator.of(context).pop();
+                              refresh();
                             })
                       ],
                     ),
